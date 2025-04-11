@@ -1,0 +1,225 @@
+{
+  "users": [
+    {
+      "id": "545445",
+      "name": "Nguyễn Văn Hậu",
+      "email": "abcd@gmail.com",
+      "role": "Học viên",
+      "registrationDate": "12/02/2022",
+      "status": "Đang hoạt động",
+      "avatar": "/placeholder.svg?height=40&width=40"
+    },
+    {
+      "id": "545445",
+      "name": "Nguyễn Văn Hậu",
+      "email": "abcd@gmail.com",
+      "role": "Học viên",
+      "registrationDate": "12/02/2022",
+      "status": "Đang hoạt động",
+      "avatar": "/placeholder.svg?height=40&width=40"
+    },
+    {
+      "id": "545445",
+      "name": "Nguyễn Văn Hậu",
+      "email": "abcd@gmail.com",
+      "role": "Học viên",
+      "registrationDate": "12/02/2022",
+      "status": "Không hoạt động",
+      "avatar": "/placeholder.svg?height=40&width=40"
+    },
+    {
+      "id": "678901",
+      "name": "Trần Thị Mai",
+      "email": "mai.tran@gmail.com",
+      "role": "Học viên",
+      "registrationDate": "15/03/2022",
+      "status": "Đang hoạt động",
+      "avatar": "/placeholder.svg?height=40&width=40"
+    },
+    {
+      "id": "789012",
+      "name": "Lê Minh Tuấn",
+      "email": "tuan.le@gmail.com",
+      "role": "Học viên",
+      "registrationDate": "05/01/2022",
+      "status": "Đang hoạt động",
+      "avatar": "/placeholder.svg?height=40&width=40"
+    },
+    {
+      "id": "890123",
+      "name": "Phạm Thanh Hà",
+      "email": "ha.pham@gmail.com",
+      "role": "Học viên",
+      "registrationDate": "20/04/2022",
+      "status": "Không hoạt động",
+      "avatar": "/placeholder.svg?height=40&width=40"
+    },
+    {
+      "id": "545445",
+      "name": "Nguyễn Văn Hậu",
+      "email": "abcd@gmail.com",
+      "role": "Học viên",
+      "registrationDate": "12/02/2022",
+      "status": "Đang hoạt động",
+      "avatar": "/placeholder.svg?height=40&width=40"
+    },
+    {
+      "id": "545445",
+      "name": "Nguyễn Văn Hậu",
+      "email": "abcd@gmail.com",
+      "role": "Học viên",
+      "registrationDate": "12/02/2022",
+      "status": "Đang hoạt động",
+      "avatar": "/placeholder.svg?height=40&width=40"
+    },
+    {
+      "id": "545445",
+      "name": "Nguyễn Văn Hậu",
+      "email": "abcd@gmail.com",
+      "role": "Học viên",
+      "registrationDate": "12/02/2022",
+      "status": "Không hoạt động",
+      "avatar": "/placeholder.svg?height=40&width=40"
+    },
+    {
+      "id": "678901",
+      "name": "Trần Thị Mai",
+      "email": "mai.tran@gmail.com",
+      "role": "Học viên",
+      "registrationDate": "15/03/2022",
+      "status": "Đang hoạt động",
+      "avatar": "/placeholder.svg?height=40&width=40"
+    },
+    {
+      "id": "545445",
+      "name": "Nguyễn Văn Hậu",
+      "email": "abcd@gmail.com",
+      "role": "Học viên",
+      "registrationDate": "12/02/2022",
+      "status": "Đang hoạt động",
+      "avatar": "/placeholder.svg?height=40&width=40"
+    },
+    {
+      "id": "545445",
+      "name": "Nguyễn Văn Hậu",
+      "email": "abcd@gmail.com",
+      "role": "Học viên",
+      "registrationDate": "12/02/2022",
+      "status": "Đang hoạt động",
+      "avatar": "/placeholder.svg?height=40&width=40"
+    },
+    {
+      "id": "545445",
+      "name": "Nguyễn Văn Hậu",
+      "email": "abcd@gmail.com",
+      "role": "Học viên",
+      "registrationDate": "12/02/2022",
+      "status": "Không hoạt động",
+      "avatar": "/placeholder.svg?height=40&width=40"
+    },
+    {
+      "id": "678901",
+      "name": "Trần Thị Mai",
+      "email": "mai.tran@gmail.com",
+      "role": "Học viên",
+      "registrationDate": "15/03/2022",
+      "status": "Đang hoạt động",
+      "avatar": "/placeholder.svg?height=40&width=40"
+    },
+    {
+      "id": "545445",
+      "name": "Nguyễn Văn Hậu",
+      "email": "abcd@gmail.com",
+      "role": "Học viên",
+      "registrationDate": "12/02/2022",
+      "status": "Đang hoạt động",
+      "avatar": "/placeholder.svg?height=40&width=40"
+    },
+    {
+      "id": "545445",
+      "name": "Nguyễn Văn Hậu",
+      "email": "abcd@gmail.com",
+      "role": "Học viên",
+      "registrationDate": "12/02/2022",
+      "status": "Đang hoạt động",
+      "avatar": "/placeholder.svg?height=40&width=40"
+    },
+    {
+      "id": "545445",
+      "name": "Nguyễn Văn Hậu",
+      "email": "abcd@gmail.com",
+      "role": "Học viên",
+      "registrationDate": "12/02/2022",
+      "status": "Không hoạt động",
+      "avatar": "/placeholder.svg?height=40&width=40"
+    },
+    {
+      "id": "678901",
+      "name": "Trần Thị Mai",
+      "email": "mai.tran@gmail.com",
+      "role": "Học viên",
+      "registrationDate": "15/03/2022",
+      "status": "Đang hoạt động",
+      "avatar": "/placeholder.svg?height=40&width=40"
+    },
+    {
+      "id": "545445",
+      "name": "Nguyễn Văn Hậu",
+      "email": "abcd@gmail.com",
+      "role": "Học viên",
+      "registrationDate": "12/02/2022",
+      "status": "Đang hoạt động",
+      "avatar": "/placeholder.svg?height=40&width=40"
+    },
+    {
+      "id": "545445",
+      "name": "Nguyễn Văn Hậu",
+      "email": "abcd@gmail.com",
+      "role": "Học viên",
+      "registrationDate": "12/02/2022",
+      "status": "Đang hoạt động",
+      "avatar": "/placeholder.svg?height=40&width=40"
+    },
+    {
+      "id": "545445",
+      "name": "Nguyễn Văn Hậu",
+      "email": "abcd@gmail.com",
+      "role": "Học viên",
+      "registrationDate": "12/02/2022",
+      "status": "Không hoạt động",
+      "avatar": "/placeholder.svg?height=40&width=40"
+    },
+    {
+      "id": "678901",
+      "name": "Trần Thị Mai",
+      "email": "mai.tran@gmail.com",
+      "role": "Học viên",
+      "registrationDate": "15/03/2022",
+      "status": "Đang hoạt động",
+      "avatar": "/placeholder.svg?height=40&width=40"
+    }
+  ],
+  "stats": {
+    "totalUsers": 2167,
+    "totalStudents": 59,
+    "newRegistrations": 220,
+    "usersTrend": {
+      "percentage": 11.01,
+      "direction": "up"
+    },
+    "studentsTrend": {
+      "percentage": 9.05,
+      "direction": "down"
+    },
+    "registrationsTrend": {
+      "percentage": 9.05,
+      "direction": "down"
+    }
+  },
+  "pagination": {
+    "currentPage": 1,
+    "totalPages": 3,
+    "itemsPerPage": 7,
+    "totalItems": 42
+  }
+}

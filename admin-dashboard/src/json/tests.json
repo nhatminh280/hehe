@@ -1,0 +1,26 @@
+[
+  {
+    "id": 1,
+    "name": "Grammar Fundamentals",
+    "course": "English Grammar 101",
+    "questions": 25,
+    "duration": "45 mins",
+    "status": "Active"
+  },
+  {
+    "id": 2,
+    "name": "Vocabulary Test",
+    "course": "English Vocabulary",
+    "questions": 30,
+    "duration": "60 mins",
+    "status": "Active"
+  },
+  {
+    "id": 3,
+    "name": "Reading Comprehension",
+    "course": "Advanced English",
+    "questions": 15,
+    "duration": "30 mins",
+    "status": "Active"
+  }
+]
