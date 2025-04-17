@@ -3,14 +3,13 @@
 import { X } from "lucide-react";
 import { useState } from "react";
 
-export default function EditUserModal({
+export default function AddUserModal({
   formData,
   onChange,
   onSubmit,
   onClose,
 }) {
   const [showRoleDropdown, setShowRoleDropdown] = useState(false);
-  const [showStatusDropdown, setShowStatusDropdown] = useState(false);
   const [showGenderDropdown, setShowGenderDropdown] = useState(false);
 
   return (
@@ -22,7 +21,7 @@ export default function EditUserModal({
       <div className="fixed inset-0 flex items-center justify-center z-50 p-4">
         <div className="bg-white rounded-lg shadow-xl max-w-md w-full">
           <div className="flex items-center justify-between p-4 border-b">
-            <h2 className="text-xl font-bold">Edit User</h2>
+            <h2 className="text-xl font-bold">Add User</h2>
             <button
               onClick={onClose}
               className="text-gray-500 hover:text-gray-700 transition-colors"
@@ -35,32 +34,31 @@ export default function EditUserModal({
             {/* Name Field */}
             <div className="space-y-2">
               <label
-                htmlFor="edit-name"
+                htmlFor="add-username"
                 className="block text-sm font-medium text-gray-700"
               >
                 Full Name
               </label>
               <input
-                id="edit-name"
-                name="name"
-                value={formData.name}
+                id="add-username"
+                name="username"
+                value={formData.username}
                 onChange={onChange}
                 required
                 className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
               />
             </div>
-
             {/* Email Field */}
             <div className="space-y-2">
               <label
-                htmlFor="edit-email"
+                htmlFor="add-email"
                 className="block text-sm font-medium text-gray-700"
               >
                 Email
               </label>
               <input
                 type="email"
-                id="edit-email"
+                id="add-email"
                 name="email"
                 value={formData.email}
                 onChange={onChange}
@@ -68,29 +66,27 @@ export default function EditUserModal({
                 className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
               />
             </div>
-
             {/* Phone Field */}
             <div className="space-y-2">
               <label
-                htmlFor="edit-phone"
+                htmlFor="add-phone"
                 className="block text-sm font-medium text-gray-700"
               >
                 Phone
               </label>
               <input
                 type="tel"
-                id="edit-phone"
+                id="add-phone"
                 name="phone"
                 value={formData.phone || ""}
                 onChange={onChange}
                 className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
               />
             </div>
-
             {/* Role Field */}
             <div className="space-y-2">
               <label
-                htmlFor="edit-role"
+                htmlFor="add-role"
                 className="block text-sm font-medium text-gray-700"
               >
                 Role
@@ -98,7 +94,7 @@ export default function EditUserModal({
               <div className="relative">
                 <button
                   type="button"
-                  id="edit-role"
+                  id="add-role"
                   className="w-full px-3 py-2 text-left border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 flex justify-between items-center"
                   onClick={() => setShowRoleDropdown(!showRoleDropdown)}
                 >
@@ -132,7 +128,7 @@ export default function EditUserModal({
                       >
                         Học viên
                       </li>
-                      <li
+                      {/* <li
                         className="px-3 py-2 hover:bg-gray-100 cursor-pointer"
                         onClick={() => {
                           onChange({
@@ -142,82 +138,16 @@ export default function EditUserModal({
                         }}
                       >
                         Giảng viên
-                      </li>
+                      </li> */}
                     </ul>
                   </div>
                 )}
               </div>
             </div>
-
-            {/* Status Field */}
-            <div className="space-y-2">
-              <label
-                htmlFor="edit-status"
-                className="block text-sm font-medium text-gray-700"
-              >
-                Status
-              </label>
-              <div className="relative">
-                <button
-                  type="button"
-                  id="edit-status"
-                  className="w-full px-3 py-2 text-left border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 flex justify-between items-center"
-                  onClick={() => setShowStatusDropdown(!showStatusDropdown)}
-                >
-                  <span>{formData.status || "Select status"}</span>
-                  <svg
-                    className="h-5 w-5 text-gray-400"
-                    viewBox="0 0 20 20"
-                    fill="none"
-                    stroke="currentColor"
-                  >
-                    <path
-                      d="M7 7l3 3 3-3"
-                      strokeWidth="1.5"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                    />
-                  </svg>
-                </button>
-
-                {showStatusDropdown && (
-                  <div className="absolute z-10 w-full mt-1 bg-white border border-gray-300 rounded-md shadow-lg">
-                    <ul className="py-1">
-                      <li
-                        className="px-3 py-2 hover:bg-gray-100 cursor-pointer"
-                        onClick={() => {
-                          onChange({
-                            target: { name: "status", value: "Đang hoạt động" },
-                          });
-                          setShowStatusDropdown(false);
-                        }}
-                      >
-                        Đang hoạt động
-                      </li>
-                      <li
-                        className="px-3 py-2 hover:bg-gray-100 cursor-pointer"
-                        onClick={() => {
-                          onChange({
-                            target: {
-                              name: "status",
-                              value: "Không hoạt động",
-                            },
-                          });
-                          setShowStatusDropdown(false);
-                        }}
-                      >
-                        Không hoạt động
-                      </li>
-                    </ul>
-                  </div>
-                )}
-              </div>
-            </div>
-
             {/* Gender Field */}
             <div className="space-y-2">
               <label
-                htmlFor="edit-gender"
+                htmlFor="add-gender"
                 className="block text-sm font-medium text-gray-700"
               >
                 Gender
@@ -225,7 +155,7 @@ export default function EditUserModal({
               <div className="relative">
                 <button
                   type="button"
-                  id="edit-gender"
+                  id="add-gender"
                   className="w-full px-3 py-2 text-left border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 flex justify-between items-center"
                   onClick={() => setShowGenderDropdown(!showGenderDropdown)}
                 >
@@ -273,7 +203,6 @@ export default function EditUserModal({
                 )}
               </div>
             </div>
-
             <div className="flex justify-end gap-2 pt-4 border-t mt-6">
               <button
                 type="button"
@@ -286,7 +215,7 @@ export default function EditUserModal({
                 type="submit"
                 className="px-4 py-2 bg-blue-600 hover:bg-blue-700 rounded-md text-white font-medium transition-colors"
               >
-                Save Changes
+                Add User
               </button>
             </div>
           </form>

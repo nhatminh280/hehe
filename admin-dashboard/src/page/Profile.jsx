@@ -54,6 +54,7 @@ export default function ProfilePage() {
 
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  // using esc to escape page
 
   // Initialize form data from profile data
   useEffect(() => {

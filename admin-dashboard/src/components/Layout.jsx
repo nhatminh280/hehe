@@ -88,9 +88,13 @@ export default function Layout({ children }) {
 
           <div className="py-2">
             <Link
-              to="/"
+              to="/dashboard"
               className={`flex items-center px-4 py-3 hover:bg-primary/10 dark:hover:bg-primary/20shadow-none hover:shadow-md transition-shadow duration-300
- ${isActive("/") ? "text-primary-foreground bg-primary" : "text-foreground"}`}
+ ${
+   isActive("/dashboard")
+     ? "text-primary-foreground bg-primary"
+     : "text-foreground"
+ }`}
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"

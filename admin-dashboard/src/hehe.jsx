@@ -1,11 +1,13 @@
+import LoginPage from "./page/loginPage";
 import React from "react";
+import { Link } from "react-router-dom";
 
-function Haha() {
+const hehe = () => {
   return (
-    <div className="text-7xl bg-green-400">
-      heheheheheh tao dayy dell co bug{" "}
-    </div>
+    <Link to="login">
+      <LoginPage />
+    </Link>
   );
-}
+};
 
-export default Haha;
+export default hehe;

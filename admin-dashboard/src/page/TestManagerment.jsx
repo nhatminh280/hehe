@@ -429,7 +429,7 @@ export default function TestManagement() {
                       Test Name
                     </th>
                     <th className="px-6 py-3.5 bg-muted text-left text-xs font-semibold text-muted-foreground uppercase tracking-wider">
-                      Courses
+                      Test set
                     </th>
                     <th className="px-6 py-3.5 bg-muted text-left text-xs font-semibold text-muted-foreground uppercase tracking-wider">
                       Questions
@@ -884,7 +884,7 @@ export default function TestManagement() {
 
                 <div className="grid grid-cols-2 gap-4">
                   {/* Questions Count */}
-                  <div className="space-y-2">
+                  {/* <div className="space-y-2">
                     <label
                       htmlFor="edit-questions"
                       className="block text-sm font-medium text-foreground"
@@ -901,7 +901,7 @@ export default function TestManagement() {
                       placeholder="Enter number"
                       min="0"
                     />
-                  </div>
+                  </div> */}
 
                   {/* Completion Time */}
                   <div className="space-y-2">

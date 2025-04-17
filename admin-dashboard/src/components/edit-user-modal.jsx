@@ -20,12 +20,15 @@ export default function EditUserModal({
         onClick={onClose}
       ></div>
       <div className="fixed inset-0 flex items-center justify-center z-50 p-4">
-        <div className="bg-white rounded-lg shadow-xl max-w-md w-full">
-          <div className="flex items-center justify-between p-4 border-b">
+        <div
+          className="bg-card rounded-xl shadow-2xl w-full max-w-md mx-4 
+        overflow-hidden border border-border animate-scaleIn"
+        >
+          <div className="flex justify-between items-center p-6 border-b border-border bg-gradient-to-r from-primary to-blue-700 text-white ">
             <h2 className="text-xl font-bold">Edit User</h2>
             <button
               onClick={onClose}
-              className="text-gray-500 hover:text-gray-700 transition-colors"
+              className="text-white/80 hover:text-white transition-colors bg-white/10 rounded-full p-1"
             >
               <X className="h-5 w-5" />
             </button>
@@ -136,12 +139,12 @@ export default function EditUserModal({
                         className="px-3 py-2 hover:bg-gray-100 cursor-pointer"
                         onClick={() => {
                           onChange({
-                            target: { name: "role", value: "Giảng viên" },
+                            target: { name: "role", value: "Người dùng" },
                           });
                           setShowRoleDropdown(false);
                         }}
                       >
-                        Giảng viên
+                        Người dùng
                       </li>
                     </ul>
                   </div>

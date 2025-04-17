@@ -7,33 +7,33 @@ import { forwardRef } from "react";
 const UserRow = forwardRef(({ user, onView, onEdit, onDelete }, ref) => {
   const getStatusColor = (status) => {
     if (status === "Đang hoạt động") {
-      return "bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400";
+      return "bg-emerald-100 text-emerald-800 dark:bg-emerald-900/30 dark:text-emerald-400";
     } else {
       return "bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-400";
     }
   };
 
   const getRoleColor = () => {
-    return "bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-400";
+    return "bg-primary/10 text-primary dark:bg-primary/20";
   };
 
   return (
     <tr
       ref={ref}
-      className="bg-white hover:bg-gray-50 transition-colors duration-150"
+      className="bg-card hover:bg-accent/10 transition-colors duration-150"
     >
-      <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-800">
+      <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-card-foreground">
         {user.id}
       </td>
       <td className="px-6 py-4 whitespace-nowrap">
-        <div className="h-10 w-10 rounded-full overflow-hidden bg-gray-100">
-          <UserCircle className="h-full w-full object-cover text-slate-500" />
+        <div className="h-10 w-10 rounded-full overflow-hidden bg-muted">
+          <UserCircle className="h-full w-full object-cover text-muted-foreground" />
         </div>
       </td>
-      <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-800">
+      <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-card-foreground">
         {user.name}
       </td>
-      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+      <td className="px-6 py-4 whitespace-nowrap text-sm text-muted-foreground">
         {user.email}
       </td>
       <td className="px-6 py-4 whitespace-nowrap">
@@ -43,13 +43,13 @@ const UserRow = forwardRef(({ user, onView, onEdit, onDelete }, ref) => {
           {user.role}
         </span>
       </td>
-      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+      <td className="px-6 py-4 whitespace-nowrap text-sm text-muted-foreground">
         {user.registrationDate}
       </td>
       <td className="px-6 py-4 whitespace-nowrap">
         <div className="flex items-center">
           {user.status === "Đang hoạt động" ? (
-            <CheckCircle2 className="h-4 w-4 text-green-500 mr-1.5" />
+            <CheckCircle2 className="h-4 w-4 text-emerald-500 mr-1.5" />
           ) : (
             <XCircle className="h-4 w-4 text-red-500 mr-1.5" />
           )}
@@ -66,19 +66,19 @@ const UserRow = forwardRef(({ user, onView, onEdit, onDelete }, ref) => {
         <div className="flex space-x-2">
           <button
             onClick={onView}
-            className="h-8 w-8 p-0 flex items-center justify-center rounded-md text-blue-600 hover:text-blue-800 hover:bg-blue-100"
+            className="h-8 w-8 p-0 flex items-center justify-center rounded-md text-primary hover:text-primary-foreground hover:bg-primary transition-colors"
           >
             <Eye className="h-4 w-4" />
           </button>
           <button
             onClick={onEdit}
-            className="h-8 w-8 p-0 flex items-center justify-center rounded-md text-amber-600 hover:text-amber-800 hover:bg-amber-100"
+            className="h-8 w-8 p-0 flex items-center justify-center rounded-md text-amber-600 hover:text-amber-50 hover:bg-amber-600 transition-colors"
           >
             <Edit className="h-4 w-4" />
           </button>
           <button
             onClick={onDelete}
-            className="h-8 w-8 p-0 flex items-center justify-center rounded-md text-red-600 hover:text-red-800 hover:bg-red-100"
+            className="h-8 w-8 p-0 flex items-center justify-center rounded-md text-destructive hover:text-destructive-foreground hover:bg-destructive transition-colors"
           >
             <Trash2 className="h-4 w-4" />
           </button>

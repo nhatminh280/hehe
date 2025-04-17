@@ -36,8 +36,7 @@ export default function ProfileMini() {
   const handleLogout = () => {
     // Implement logout functionality here
     console.log("Logging out...");
-    // You would typically clear session/tokens here
-    alert("Logged out successfully");
+    // clear session & token hear
   };
 
   return (
@@ -92,13 +91,16 @@ export default function ProfileMini() {
 
       {/* Footer Actions */}
       <div className="border-t border-border p-4 flex justify-between bg-card">
-        <button
+        <Link
+          to="/login"
           onClick={handleLogout}
           className="flex items-center gap-2 text-destructive hover:bg-destructive/10 transition-colors px-3 py-2 rounded-lg"
         >
           <LogOut className="h-4 w-4" />
-          <span className="text-sm font-medium">Logout</span>
-        </button>
+          <span onClick={handleLogout} className="text-sm font-medium">
+            Logout
+          </span>
+        </Link>
         <Link
           to="/profile"
           className="flex items-center gap-2 text-primary hover:bg-primary/10 transition-colors px-3 py-2 rounded-lg"
