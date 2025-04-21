@@ -2,7 +2,7 @@
 
 import Logo from "../logo/LogoApp";
 import ProfileMini from "./profile-mini";
-import { Bell, ChevronDown, Menu, Moon, Sun } from "lucide-react";
+import { Bell, ChevronDown, Menu, Moon, Sun, CircleUser } from "lucide-react";
 import { useState, useEffect, useRef } from "react";
 import { Link, useLocation } from "react-router-dom";
 
@@ -64,7 +64,7 @@ export default function Layout({ children }) {
   };
 
   return (
-    <div className="flex h-screen flex-col bg-background">
+    <div className="flex h-screen flex-col bg-background select-none">
       <div className="flex flex-1 overflow-hidden">
         {/* Sidebar */}
         <div

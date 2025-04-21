@@ -6,6 +6,8 @@ import { Navigate, useLocation } from "react-router-dom";
 export default function ProtectedRoute({ children }) {
   const { user, loading } = useAuth();
   const location = useLocation();
+  // console.log("ProtectedRoute - user:", user);
+  // console.log("ProtectedRoute - auth token:", TokenService.getToken());
 
   // Hiển thị trạng thái loading nếu đang kiểm tra xác thực
   if (loading) {

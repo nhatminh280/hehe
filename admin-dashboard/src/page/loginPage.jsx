@@ -1,6 +1,7 @@
 "use client";
 
 import { useAuth } from "../hooks/auth-context";
+import { TokenService } from "../utils/auth-service";
 import PasswordStrength from "@/components/password-strength";
 import { useToast } from "@/components/toast-context";
 import {
@@ -20,7 +21,8 @@ import { useNavigate } from "react-router-dom";
 export default function LoginPage() {
   const navigate = useNavigate();
   const { addToast } = useToast();
-  const { login, register, resetPassword } = useAuth();
+  const { login, register, resetPassword, verifyResetCode, setNewPassword } =
+    useAuth();
 
   // Modal state
   const [showLoginModal, setShowLoginModal] = useState(false);
@@ -43,7 +45,7 @@ export default function LoginPage() {
   const [loginPassword, setLoginPassword] = useState("");
   const [registerEmail, setRegisterEmail] = useState("");
   const [registerPassword, setRegisterPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState(""); // confirm dùng cho đăng kí
   const [resetEmail, setResetEmail] = useState("");
 
   // Form validation
@@ -54,6 +56,24 @@ export default function LoginPage() {
   const [isRegisterSubmitting, setIsRegisterSubmitting] = useState(false);
   const [isResetSubmitting, setIsResetSubmitting] = useState(false);
   //login
+
+  // Thêm các state mới cho quy trình quên mật khẩu
+  const [showVerificationCodeModal, setShowVerificationCodeModal] =
+    useState(false);
+  const [showNewPasswordModal, setShowNewPasswordModal] = useState(false);
+  const [verificationCode, setVerificationCode] = useState("");
+  const [verificationCodeErrors, setVerificationCodeErrors] = useState({});
+  const [isVerificationSubmitting, setIsVerificationSubmitting] =
+    useState(false);
+  const [newPassword, setNewPasswordState] = useState("");
+  const [confirmNewPassword, setConfirmNewPassword] = useState("");
+  const [newPasswordErrors, setNewPasswordErrors] = useState({});
+  const [isNewPasswordSubmitting, setIsNewPasswordSubmitting] = useState(false);
+  const [verificationCodeFocus, setVerificationCodeFocus] = useState(false);
+  const [newPasswordFocus, setNewPasswordFocus] = useState(false);
+  const [confirmNewPasswordFocus, setConfirmNewPasswordFocus] = useState(false);
+  const [showNewPassword, setShowNewPassword] = useState(false);
+  const [showConfirmNewPassword, setShowConfirmNewPassword] = useState(false);
 
   // Modal handling functions
   const openLoginModal = () => {
@@ -74,15 +94,43 @@ export default function LoginPage() {
     resetFormErrors();
   };
 
+  // Cập nhật hàm openForgotPasswordModal
   const openForgotPasswordModal = () => {
     setIsModalTransitioning(true);
     setShowForgotPasswordModal(true);
     setShowLoginModal(false);
     setShowRegisterModal(false);
     setShowResetConfirmation(false);
+    setShowVerificationCodeModal(false);
+    setShowNewPasswordModal(false);
     resetFormErrors();
   };
 
+  // Thêm hàm mở modal nhập mã xác nhận
+  const openVerificationCodeModal = () => {
+    setIsModalTransitioning(true);
+    setShowVerificationCodeModal(true);
+    setShowForgotPasswordModal(false);
+    setShowLoginModal(false);
+    setShowRegisterModal(false);
+    setShowResetConfirmation(false);
+    setShowNewPasswordModal(false);
+    resetFormErrors();
+  };
+
+  // Thêm hàm mở modal đặt mật khẩu mới
+  const openNewPasswordModal = () => {
+    setIsModalTransitioning(true);
+    setShowNewPasswordModal(true);
+    setShowVerificationCodeModal(false);
+    setShowForgotPasswordModal(false);
+    setShowLoginModal(false);
+    setShowRegisterModal(false);
+    setShowResetConfirmation(false);
+    resetFormErrors();
+  };
+
+  // Cập nhật hàm closeModals
   const closeModals = () => {
     setIsModalTransitioning(true);
     setTimeout(() => {
@@ -90,15 +138,20 @@ export default function LoginPage() {
       setShowRegisterModal(false);
       setShowForgotPasswordModal(false);
       setShowResetConfirmation(false);
+      setShowVerificationCodeModal(false);
+      setShowNewPasswordModal(false);
       setIsModalTransitioning(false);
       resetFormErrors();
     }, 300);
   };
 
+  // Cập nhật hàm resetFormErrors để xóa lỗi của các form mới
   const resetFormErrors = () => {
     setLoginErrors({});
     setRegisterErrors({});
     setResetErrors({});
+    setVerificationCodeErrors({});
+    setNewPasswordErrors({});
   };
 
   // Form validation functions
@@ -139,9 +192,12 @@ export default function LoginPage() {
     }
 
     try {
-      await login(loginEmail, loginPassword);
+      const userData = await login(loginEmail, loginPassword);
+      console.log("Login success, user data:", userData);
+      console.log("Token after login:", TokenService.getToken()); // Kiểm tra token
+
       closeModals();
-      navigate("/");
+      navigate("/dashboard");
     } catch (error) {
       console.error("Login failed:", error);
       addToast(
@@ -191,7 +247,7 @@ export default function LoginPage() {
     try {
       await register(registerEmail, registerPassword);
       closeModals();
-      navigate("/");
+      navigate("/login");
     } catch (error) {
       console.error("Registration failed:", error);
       addToast("Đăng ký không thành công. Vui lòng thử lại.", "error");
@@ -200,6 +256,7 @@ export default function LoginPage() {
     }
   };
 
+  // Cập nhật hàm xử lý gửi email đặt lại mật khẩu
   const handleResetPasswordSubmit = async (e) => {
     e.preventDefault();
     setIsResetSubmitting(true);
@@ -222,9 +279,10 @@ export default function LoginPage() {
     }
 
     try {
+      // Thay vì hiển thị modal xác nhận, chuyển sang modal nhập mã xác nhận
       await resetPassword(resetEmail);
-      setShowResetConfirmation(true);
-      setShowForgotPasswordModal(false);
+      addToast("Mã xác nhận đã được gửi đến email của bạn", "success");
+      openVerificationCodeModal();
     } catch (error) {
       console.error("Password reset failed:", error);
       addToast(
@@ -235,6 +293,110 @@ export default function LoginPage() {
       setIsResetSubmitting(false);
     }
   };
+
+  // Cập nhật phần xử lý mã xác nhận và đặt mật khẩu mới
+  const handleVerificationCodeSubmit = async (e) => {
+    e.preventDefault();
+    setIsVerificationSubmitting(true);
+
+    // Reset errors
+    const errors = {};
+
+    // Validate verification code
+    if (!verificationCode) {
+      errors.code = "Mã xác nhận là bắt buộc";
+    } else if (verificationCode.length < 6) {
+      errors.code = "Mã xác nhận phải có ít nhất 6 ký tự";
+    }
+
+    // If there are errors, display them
+    if (Object.keys(errors).length > 0) {
+      setVerificationCodeErrors(errors);
+      setIsVerificationSubmitting(false);
+      return;
+    }
+
+    try {
+      // Gọi API để xác minh mã code
+      await verifyResetCode(resetEmail, verificationCode);
+      openNewPasswordModal();
+    } catch (error) {
+      console.error("Verification failed:", error);
+      // Toast thông báo đã được xử lý trong auth-provider
+    } finally {
+      setIsVerificationSubmitting(false);
+    }
+  };
+
+  // Cập nhật phần xử lý đặt mật khẩu mới
+  const handleNewPasswordSubmit = async (e) => {
+    e.preventDefault();
+    setIsNewPasswordSubmitting(true);
+
+    // Reset errors
+    const errors = {};
+
+    // Validate new password
+    if (!newPassword) {
+      errors.password = "Mật khẩu mới là bắt buộc";
+    } else if (!validatePassword(newPassword)) {
+      errors.password = "Mật khẩu phải có ít nhất 8 ký tự";
+    }
+
+    // Validate confirm password
+    if (!confirmNewPassword) {
+      errors.confirmPassword = "Xác nhận mật khẩu là bắt buộc";
+    } else if (confirmNewPassword !== newPassword) {
+      errors.confirmPassword = "Mật khẩu không khớp";
+    }
+
+    // If there are errors, display them
+    if (Object.keys(errors).length > 0) {
+      setNewPasswordErrors(errors);
+      setIsNewPasswordSubmitting(false);
+      return;
+    }
+
+    try {
+      // Gọi API để đặt mật khẩu mới
+      await setNewPassword(resetEmail, newPassword, confirmNewPassword);
+
+      closeModals();
+      openLoginModal();
+    } catch (error) {
+      console.error("Password reset failed:", error);
+    } finally {
+      setIsNewPasswordSubmitting(false);
+    }
+  };
+
+  // Cập nhật useEffect để xử lý các modal mới
+  useEffect(() => {
+    if (
+      showLoginModal ||
+      showRegisterModal ||
+      showForgotPasswordModal ||
+      showResetConfirmation ||
+      showVerificationCodeModal ||
+      showNewPasswordModal
+    ) {
+      document.body.classList.add("overflow-hidden");
+      setTimeout(() => setIsModalTransitioning(false), 50);
+    } else {
+      document.body.classList.remove("overflow-hidden");
+    }
+
+    return () => {
+      document.body.classList.remove("overflow-hidden");
+    };
+  }, [
+    showLoginModal,
+    showRegisterModal,
+    showForgotPasswordModal,
+    showResetConfirmation,
+    showVerificationCodeModal,
+    showNewPasswordModal,
+  ]);
 
   useEffect(() => {
     if (
@@ -284,7 +446,7 @@ export default function LoginPage() {
       <div className="w-full max-w-md mb-8 relative z-10 flex justify-center">
         <div className="text-3xl font-bold text-[#0071f9] flex items-center">
           <span className="bg-[#0071f9] text-white px-3 py-1 rounded-lg mr-2">
-            ET
+            E
           </span>
           <span>Enghub</span>
         </div>
@@ -295,9 +457,9 @@ export default function LoginPage() {
           Tham gia ngay cùng Enghub
         </h1>
         <h2 className="text-lg text-[#0071f9] font-medium mb-4">
-          Nền tảng học và luyện thi thông minh , trực tuyến tốt nhất hiện nay
+          Nền tảng học và luyện thi thông minh
         </h2>
-        {/* <p className="text-sm text-gray-600 mt-4">
+        <p className="text-sm text-gray-600 mt-4">
           Bằng cách tham gia, chúng tôi xác nhận bạn đã đọc và đồng ý với{" "}
           <a href="#" className="text-[#0071f9] hover:underline transition-all">
             Điều kiện & Điều khoản
@@ -307,7 +469,7 @@ export default function LoginPage() {
             Chính sách bảo mật
           </a>{" "}
           của Enghub
-        </p> */}
+        </p>
 
         <div className="flex flex-col w-full max-w-xs mx-auto gap-3 mt-8">
           <button
@@ -967,6 +1129,314 @@ export default function LoginPage() {
                 <span className="mr-2">Quay lại đăng nhập</span>
                 <ArrowRight size={18} />
               </button>
+            </div>
+          </div>
+        </div>
+      )}
+      {/* Verification Code Modal */}
+      {showVerificationCodeModal && (
+        <div
+          className={`fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50 backdrop-blur-sm ${
+            isModalTransitioning ? "opacity-0" : "opacity-100"
+          } transition-opacity duration-300`}
+          onClick={(e) => {
+            if (e.target === e.currentTarget) closeModals();
+          }}
+        >
+          <div
+            className={`bg-white rounded-2xl w-full max-w-md relative overflow-hidden shadow-2xl ${
+              isModalTransitioning ? "scale-95" : "scale-100"
+            } transition-all duration-300`}
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="flex items-center justify-between p-4 border-b">
+              <button
+                onClick={openForgotPasswordModal}
+                className="p-2 hover:bg-gray-100 rounded-full transition-colors"
+              >
+                <ChevronLeft size={20} />
+              </button>
+              <h2 className="text-xl font-semibold text-center flex-1 text-[#152946]">
+                Nhập mã xác nhận
+              </h2>
+              <button
+                onClick={closeModals}
+                className="p-2 hover:bg-gray-100 rounded-full transition-colors"
+              >
+                <X size={20} />
+              </button>
+            </div>
+
+            <div className="p-6">
+              <p className="text-gray-600 mb-6">
+                Vui lòng nhập mã xác nhận đã được gửi đến email của bạn.
+              </p>
+
+              <form
+                className="space-y-4"
+                onSubmit={handleVerificationCodeSubmit}
+              >
+                <div className="space-y-1">
+                  <label
+                    htmlFor="verification-code"
+                    className="block text-sm font-medium text-gray-700"
+                  >
+                    Mã xác nhận
+                  </label>
+                  <div
+                    className={`relative flex items-center ${
+                      verificationCodeFocus ? "ring-2 ring-[#0071f9]" : ""
+                    } rounded-lg overflow-hidden ${
+                      verificationCodeErrors.code ? "border-red-500" : ""
+                    }`}
+                  >
+                    <input
+                      type="text"
+                      id="verification-code"
+                      placeholder="123456"
+                      className={`w-full p-3 border ${
+                        verificationCodeErrors.code
+                          ? "border-red-500"
+                          : "border-gray-300"
+                      } rounded-lg focus:outline-none`}
+                      onFocus={() => setVerificationCodeFocus(true)}
+                      onBlur={() => setVerificationCodeFocus(false)}
+                      value={verificationCode}
+                      onChange={(e) => setVerificationCode(e.target.value)}
+                    />
+                  </div>
+                  <ErrorMessage message={verificationCodeErrors.code} />
+                </div>
+
+                <button
+                  type="submit"
+                  disabled={isVerificationSubmitting}
+                  className={`w-full py-3 bg-[#0071f9] text-white rounded-lg hover:bg-blue-600 transition-all duration-300 mt-4 font-medium shadow-md hover:shadow-lg hover:-translate-y-0.5 flex items-center justify-center ${
+                    isVerificationSubmitting
+                      ? "opacity-70 cursor-not-allowed"
+                      : ""
+                  }`}
+                >
+                  {isVerificationSubmitting ? (
+                    <span className="flex items-center">
+                      <svg
+                        className="animate-spin -ml-1 mr-2 h-4 w-4 text-white"
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                      >
+                        <circle
+                          className="opacity-25"
+                          cx="12"
+                          cy="12"
+                          r="10"
+                          stroke="currentColor"
+                          strokeWidth="4"
+                        ></circle>
+                        <path
+                          className="opacity-75"
+                          fill="currentColor"
+                          d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                        ></path>
+                      </svg>
+                      Đang xử lý...
+                    </span>
+                  ) : (
+                    "Xác nhận"
+                  )}
+                </button>
+
+                <div className="text-center text-sm mt-4">
+                  <span className="text-gray-600">Chưa nhận được mã? </span>
+                  <button
+                    type="button"
+                    onClick={openForgotPasswordModal}
+                    className="text-[#0071f9] hover:underline font-medium"
+                  >
+                    Gửi lại mã
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* New Password Modal */}
+      {showNewPasswordModal && (
+        <div
+          className={`fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50 backdrop-blur-sm ${
+            isModalTransitioning ? "opacity-0" : "opacity-100"
+          } transition-opacity duration-300`}
+          onClick={(e) => {
+            if (e.target === e.currentTarget) closeModals();
+          }}
+        >
+          <div
+            className={`bg-white rounded-2xl w-full max-w-md relative overflow-hidden shadow-2xl ${
+              isModalTransitioning ? "scale-95" : "scale-100"
+            } transition-all duration-300`}
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="flex items-center justify-between p-4 border-b">
+              <button
+                onClick={openVerificationCodeModal}
+                className="p-2 hover:bg-gray-100 rounded-full transition-colors"
+              >
+                <ChevronLeft size={20} />
+              </button>
+              <h2 className="text-xl font-semibold text-center flex-1 text-[#152946]">
+                Đặt mật khẩu mới
+              </h2>
+              <button
+                onClick={closeModals}
+                className="p-2 hover:bg-gray-100 rounded-full transition-colors"
+              >
+                <X size={20} />
+              </button>
+            </div>
+
+            <div className="p-6">
+              <p className="text-gray-600 mb-6">
+                Vui lòng nhập mật khẩu mới của bạn.
+              </p>
+
+              <form className="space-y-4" onSubmit={handleNewPasswordSubmit}>
+                <div className="space-y-1">
+                  <label
+                    htmlFor="new-password"
+                    className="block text-sm font-medium text-gray-700"
+                  >
+                    Mật khẩu mới
+                  </label>
+                  <div
+                    className={`relative flex items-center ${
+                      newPasswordFocus ? "ring-2 ring-[#0071f9]" : ""
+                    } rounded-lg overflow-hidden ${
+                      newPasswordErrors.password ? "border-red-500" : ""
+                    }`}
+                  >
+                    <div className="absolute left-3 text-gray-400">
+                      <Lock size={18} />
+                    </div>
+                    <input
+                      type={showNewPassword ? "text" : "password"}
+                      id="new-password"
+                      placeholder="••••••••••••••••"
+                      className={`w-full p-3 border ${
+                        newPasswordErrors.password
+                          ? "border-red-500"
+                          : "border-gray-300"
+                      } rounded-lg focus:outline-none`}
+                      onFocus={() => setNewPasswordFocus(true)}
+                      onBlur={() => setNewPasswordFocus(false)}
+                      value={newPassword}
+                      onChange={(e) => setNewPasswordState(e.target.value)}
+                    />
+                    <button
+                      type="button"
+                      onClick={() => setShowNewPassword(!showNewPassword)}
+                      className="absolute right-3 text-gray-400 hover:text-gray-600"
+                    >
+                      {showNewPassword ? (
+                        <EyeOff size={18} />
+                      ) : (
+                        <Eye size={18} />
+                      )}
+                    </button>
+                  </div>
+                  <ErrorMessage message={newPasswordErrors.password} />
+                  {newPassword && !newPasswordErrors.password && (
+                    <PasswordStrength password={newPassword} />
+                  )}
+                </div>
+
+                <div className="space-y-1">
+                  <label
+                    htmlFor="confirm-new-password"
+                    className="block text-sm font-medium text-gray-700"
+                  >
+                    Xác nhận mật khẩu mới
+                  </label>
+                  <div
+                    className={`relative flex items-center ${
+                      confirmNewPasswordFocus ? "ring-2 ring-[#0071f9]" : ""
+                    } rounded-lg overflow-hidden ${
+                      newPasswordErrors.confirmPassword ? "border-red-500" : ""
+                    }`}
+                  >
+                    <div className="absolute left-3 text-gray-400">
+                      <Lock size={18} />
+                    </div>
+                    <input
+                      type={showConfirmNewPassword ? "text" : "password"}
+                      id="confirm-new-password"
+                      placeholder="••••••••••••••••"
+                      className={`w-full p-3 border ${
+                        newPasswordErrors.confirmPassword
+                          ? "border-red-500"
+                          : "border-gray-300"
+                      } rounded-lg focus:outline-none`}
+                      onFocus={() => setConfirmNewPasswordFocus(true)}
+                      onBlur={() => setConfirmNewPasswordFocus(false)}
+                      value={confirmNewPassword}
+                      onChange={(e) => setConfirmNewPassword(e.target.value)}
+                    />
+                    <button
+                      type="button"
+                      onClick={() =>
+                        setShowConfirmNewPassword(!showConfirmNewPassword)
+                      }
+                      className="absolute right-3 text-gray-400 hover:text-gray-600"
+                    >
+                      {showConfirmNewPassword ? (
+                        <EyeOff size={18} />
+                      ) : (
+                        <Eye size={18} />
+                      )}
+                    </button>
+                  </div>
+                  <ErrorMessage message={newPasswordErrors.confirmPassword} />
+                </div>
+
+                <button
+                  type="submit"
+                  disabled={isNewPasswordSubmitting}
+                  className={`w-full py-3 bg-[#0071f9] text-white rounded-lg hover:bg-blue-600 transition-all duration-300 mt-4 font-medium shadow-md hover:shadow-lg hover:-translate-y-0.5 flex items-center justify-center ${
+                    isNewPasswordSubmitting
+                      ? "opacity-70 cursor-not-allowed"
+                      : ""
+                  }`}
+                >
+                  {isNewPasswordSubmitting ? (
+                    <span className="flex items-center">
+                      <svg
+                        className="animate-spin -ml-1 mr-2 h-4 w-4 text-white"
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                      >
+                        <circle
+                          className="opacity-25"
+                          cx="12"
+                          cy="12"
+                          r="10"
+                          stroke="currentColor"
+                          strokeWidth="4"
+                        ></circle>
+                        <path
+                          className="opacity-75"
+                          fill="currentColor"
+                          d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                        ></path>
+                      </svg>
+                      Đang xử lý...
+                    </span>
+                  ) : (
+                    "Đặt lại mật khẩu"
+                  )}
+                </button>
+              </form>
             </div>
           </div>
         </div>

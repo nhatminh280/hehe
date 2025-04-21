@@ -24,16 +24,16 @@ export const courseService = {
     }
   },
 
-  // Get course by ID
-  getCourseById: async (id) => {
-    try {
-      const response = await api.get(`/api/courses/${id}`);
-      return response.data.body;
-    } catch (error) {
-      console.error(`Error fetching course with id ${id}:`, error);
-      throw error;
-    }
-  },
+  // // Get course by ID
+  // getCourseById: async (id) => {
+  //   try {
+  //     const response = await api.get(`/api/courses/${id}`);
+  //     return response.data.body;
+  //   } catch (error) {
+  //     console.error(`Error fetching course with id ${id}:`, error);
+  //     throw error;
+  //   }
+  // },
 
   // Create new course
   createCourse: async (courseData) => {
